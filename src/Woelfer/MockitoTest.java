@@ -9,11 +9,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.hamcrest.MockitoHamcrest.*;
 
 public class MockitoTest {
-	
+	LinkedList mockedList;
 	@Before
 	public void setUp() throws Exception {
+		mockedList = mock(LinkedList.class);
 	}
 
 	@After
@@ -54,6 +57,50 @@ public class MockitoTest {
 		 //If your code cares what get(0) returns, then something else breaks (often even before verify() gets executed).
 		 //If your code doesn't care what get(0) returns, then it should not be stubbed. Not convinced? See here.
 		 verify(mockedList).get(0);
+	}
+	
+	@Test
+	public void testArgumentMatcher(){
+		 //stubbing using built-in anyInt() argument matcher
+		 when(mockedList.get(anyInt())).thenReturn("element");
+
+		 //stubbing using custom matcher (let's say isValid() returns your own matcher implementation):
+		 //when(mockedList.contains(argThat(isValid()))).thenReturn("element");
+
+		 //following prints "element"
+		 System.out.println(mockedList.get(999));
+
+		 //you can also verify using an argument matcher
+		 verify(mockedList).get(anyInt());
+	}
+	
+	@Test
+	public void testNumberOfInovotaions(){
+		 //using mock
+		 mockedList.add("once");
+
+		 mockedList.add("twice");
+		 mockedList.add("twice");
+
+		 mockedList.add("three times");
+		 mockedList.add("three times");
+		 mockedList.add("three times");
+
+		 //following two verifications work exactly the same - times(1) is used by default
+		 verify(mockedList).add("once");
+		 verify(mockedList, times(1)).add("once");
+
+		 //exact number of invocations verification
+		 verify(mockedList, times(2)).add("twice");
+		 verify(mockedList, times(3)).add("three times");
+
+		 //verification using never(). never() is an alias to times(0)
+		 verify(mockedList, never()).add("never happened");
+
+		 //verification using atLeast()/atMost()
+		 verify(mockedList, atLeastOnce()).add("three times");
+		 verify(mockedList, atLeast(2)).add("five times");
+		 verify(mockedList, atMost(5)).add("three times");
 	}
 
 }
