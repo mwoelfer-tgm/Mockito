@@ -99,7 +99,7 @@ public class MockitoTest {
 
 		 //verification using atLeast()/atMost()
 		 verify(mockedList, atLeastOnce()).add("three times");
-		 verify(mockedList, atLeast(2)).add("five times");
+		 verify(mockedList, atLeast(2)).add("twice");
 		 verify(mockedList, atMost(5)).add("three times");
 	}
 
