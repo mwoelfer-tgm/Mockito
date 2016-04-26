@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.Matchers.*;
@@ -229,10 +231,31 @@ public class MockitoTest {
 		 //First call: throws runtime exception:
 		 mockedList.get(0);
 
-		 //Second call: prints "foo"
+		 //Second call: prints "SEW FTW"
 		 System.out.println(mockedList.get(0));
 
-		 //Any consecutive call: prints "foo" as well (last stubbing wins).
+		 //Any consecutive call: prints "SEW FTW" as well (last stubbing wins).
 		 System.out.println(mockedList.get(0));
+	}
+	
+	/*
+	 * Zuerst wird normal gestubbt, aber diesmal kommt kein thenReturn() oder etliches, sondern thenAnswer()
+	 * als nächstes erstellt mein ein Answer objekt, welches kurz darauf implementiert wurde.
+	 * 
+	 * Answer nimmt als parameter die InvocationOnMock, damit ist gemeint z.B: mockedList.add("test")
+	 * und dies wird dann mit einem kleinen text returned
+	 * 
+	 * Wenn jetzt nun .add("test") aufgerufen wird, wird "called with arguments: test" ausgegeben
+	 */
+	@Test
+	public void testStubbingWithCallbacks(){
+		when(mockedList.add("test")).thenAnswer(new Answer() {
+		     public Object answer(InvocationOnMock invocation) {
+		         Object[] args = invocation.getArguments();
+		         return "called with arguments: " + args;
+		     }
+		 });
+		
+		System.out.println(mockedList.add("test"));
 	}
 }
