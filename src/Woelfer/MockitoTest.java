@@ -112,7 +112,7 @@ public class MockitoTest {
 	}
 	
 	//mit der methode doThrow() kann man sagen welche Exception geworfen werden soll wenn (=> .when()) etwas bestimmtes gemacht wird
-	@Test
+	@Test(expected=RuntimeException.class)
 	public void testMethodWithExceptions(){
 		doThrow(new RuntimeException()).when(mockedList).clear();
 
@@ -309,6 +309,11 @@ public class MockitoTest {
 		 });
 	}
 	
+	/*
+	 * Ich habe diese Übung nicht ganz verstanden, da ich generell Argumentmatcher und so nicht verstanden habe
+	 * Jedenfalls wird zuerst zu dem Mock ein elemtn hinzugefügt, dann wird überprüft ob irgendein(???) element
+	 * hinzugefügt wurde und dann noch ein assertEquals um zu sehen ob argument nun als Element Test hat
+	 */
 	@Test
 	public void testCapturingArguments(){
 		mockedList.add("test");
