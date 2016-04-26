@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.Matchers.*;
@@ -198,5 +199,10 @@ public class MockitoTest {
 
 		 //following verification will fail
 		 verifyNoMoreInteractions(mockedList);
+	}
+	
+	@Test
+	public void testShorthandMockCreation(){
+		MockitoAnnotations.initMocks(new annotationTest());
 	}
 }
