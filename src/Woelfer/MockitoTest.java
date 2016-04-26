@@ -24,7 +24,8 @@ public class MockitoTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	
+	
 	@Test
 	public void testBehaviour() {
 		List mockedList = mock(List.class);
@@ -156,7 +157,13 @@ public class MockitoTest {
 
 	}
 
-	
+	/*
+	 * Zuerst werden 3 Mocks der klasse List erstellet
+	 * Danach wird eine ganz normale Überprüfung durchgeführt ob der String eh geaddded wurde
+	 * Überpüfen dass auf dem Mock nie eine andere Methode ausgeführt wurde
+	 * 
+	 * Zum schluss überprüfen ob es Interaktionen mit den anderen Mocks gab mit : VerifyZeroInteractions()
+	 */
 	@Test
 	public void testInteractions(){
 		List mockOne = mock(List.class);
@@ -173,5 +180,23 @@ public class MockitoTest {
 
 		 //verify that other mocks were not interacted
 		 verifyZeroInteractions(mockTwo, mockThree);
+	}
+	
+	/*
+	 * Zuerst werden zur LinkedList zwei elemente eingefügt, dann wird ordinär überprüft ob es hinzugefügt wurde
+	 * Dann wurde mit der Methode verifyNoMoreInteractions() überprüft ob sonst "nichts passiert" ist,
+	 * was falsch ist, da wir noch "two" geadded haben, also failed der test!
+	 */
+	@Test
+	public void testRedundantInvocations(){
+
+		 //using mocks
+		 mockedList.add("one");
+		 mockedList.add("two");
+
+		 verify(mockedList).add("one");
+
+		 //following verification will fail
+		 verifyNoMoreInteractions(mockedList);
 	}
 }
