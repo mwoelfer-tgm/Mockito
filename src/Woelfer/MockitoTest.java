@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
+
 import static org.mockito.Mockito.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.hamcrest.MockitoHamcrest.*;
@@ -110,6 +112,49 @@ public class MockitoTest {
 
 	   //following throws RuntimeException:
 	   mockedList.clear();
+	}
+	
+	/*
+	 * Zuerst wird ein mock der Klasse List erstellt, in welchem dann 2 Strings geadded werden
+	 * Danach wird ein inOrder objekt erzeugt, welches als Parameter im Konstruktor jene objekte nimmt die es überprüfen soll
+	 * In nächsten Block wird dann tatsächlich überprüft ob die Strings in der richtigen Reihenfolge geadded wurden
+	 * 
+	 * Als nächstes werden 2 mocks der Klasse List erstellt, in welche jeweils 1 String geadded wird
+	 * Danach wird wieder ein inOrder objekt erzeugt, welches wieder als Parameter die Objekte nimmt die es überprüft
+	 * Nun kann man wieder überprüfen ob tatsächlich zuerst der eine String und dann der andere geadded wurde
+	 */
+	@Test
+	public void testOrder(){
+		 // A. Single mock whose methods must be invoked in a particular order
+		 List singleMock = mock(List.class);
+
+		 //using a single mock
+		 singleMock.add("was added first");
+		 singleMock.add("was added second");
+
+		 //create an inOrder verifier for a single mock
+		 InOrder inOrder = inOrder(singleMock);
+
+		 //following will make sure that add is first called with "was added first, then with "was added second"
+		 inOrder.verify(singleMock).add("was added first");
+		 inOrder.verify(singleMock).add("was added second");
+
+		 // B. Multiple mocks that must be used in a particular order
+		 List firstMock = mock(List.class);
+		 List secondMock = mock(List.class);
+
+		 //using mocks
+		 firstMock.add("was called first");
+		 secondMock.add("was called second");
+
+		 //create inOrder object passing any mocks that need to be verified in order
+		 InOrder inOrder2 = inOrder(firstMock, secondMock);
+
+		 //following will make sure that firstMock was called before secondMock
+		 inOrder2.verify(firstMock).add("was called first");
+		 inOrder2.verify(secondMock).add("was called second");
+
+		 // Oh, and A + B can be mixed together at will
 	}
 
 }
