@@ -258,4 +258,37 @@ public class MockitoTest {
 		
 		System.out.println(mockedList.add("test"));
 	}
+	
+	/*
+	 * Ein Spy ist eine Art mix aus einem Mock und einer echten Klasse. zuerst wird der ein objekt der klasse List
+	 * mit der methode spy() erzeugt. Danach wird gestubbed, das wenn spy.size() aufgerufen wird 100 ausgegeben wird
+	 * Wenn man jetzt nun Methoden auf das Spy objekt ausführt werden die "echten" Methoden ausgeführt, aber wenn man 
+	 * eine gestubbte Methode aufruft wird dann z.B. 100 ausgegeben
+	 * 
+	 *  Man sollte bei Spying objects nicht when.then verwenden sondern eher do.when
+	 *  Beispiel: 
+   	 *			when(spy.get(0)).thenReturn("foo"); => wirft IndexOutOfBoundsException
+   	 *			doReturn("foo").when(spy).get(0); => funktioniert
+	 */
+	@Test
+	public void testSpyObjects(){
+		   List spy = spy(new LinkedList());
+
+		   //optionally, you can stub out some methods:
+		   when(spy.size()).thenReturn(100);
+
+		   //using the spy calls *real* methods
+		   spy.add("one");
+		   spy.add("two");
+
+		   //prints "one" - the first element of a list
+		   System.out.println(spy.get(0));
+
+		   //size() method was stubbed - 100 is printed
+		   System.out.println(spy.size());
+
+		   //optionally, you can verify
+		   verify(spy).add("one");
+		   verify(spy).add("two");
+	}
 }
