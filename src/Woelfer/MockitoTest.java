@@ -154,7 +154,24 @@ public class MockitoTest {
 		 inOrder2.verify(firstMock).add("was called first");
 		 inOrder2.verify(secondMock).add("was called second");
 
-		 // Oh, and A + B can be mixed together at will
 	}
 
+	
+	@Test
+	public void testInteractions(){
+		List mockOne = mock(List.class);
+		List mockTwo = mock(List.class);
+		List mockThree = mock(List.class);
+		//using mocks - only mockOne is interacted
+		 mockOne.add("one");
+
+		 //ordinary verification
+		 verify(mockOne).add("one");
+
+		 //verify that method was never called on a mock
+		 verify(mockOne, never()).add("two");
+
+		 //verify that other mocks were not interacted
+		 verifyZeroInteractions(mockTwo, mockThree);
+	}
 }
