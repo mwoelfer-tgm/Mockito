@@ -321,4 +321,19 @@ public class MockitoTest {
 		verify(mockedList).add(argument.capture());
 		assertEquals("test", argument.getValue().get(0));
 	}
+	
+	/*
+	 * mit der methode reset kann man das Mock so zurücksetzen das es alles vergisst (Was geadded wurde, was 
+	 * gestubbt wurde usw). man sollte es jedoch nicht mitten im code verwenden weil das ein zeichen is von einem
+	 * zu langen test => "code smell"
+	 */
+	@Test
+	public void testMockReset(){
+		List mock = mock(List.class);
+		   when(mock.size()).thenReturn(10);
+		   mock.add(1);
+
+		   reset(mock);
+		   //at this point the mock forgot any interactions & stubbing
+	}
 }
