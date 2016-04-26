@@ -336,4 +336,15 @@ public class MockitoTest {
 		   reset(mock);
 		   //at this point the mock forgot any interactions & stubbing
 	}
+	
+	/*
+	 * Die methode withSettings() erlaubt es methoden wie serializable zu haben in einem Mock.
+	 * Mit der methode serializable() kann man ein mock serealisiert machen, ich weiﬂ nicht was es bedeudet
+	 * ein serealisiertes objekt zu haben, deswegen kann ich bei dieser Methode wenig testen. 
+	 */
+	@Test
+	public void testSerializableMock(){
+		List serializableMock = mock(List.class, withSettings().serializable());
+		
+	}
 }
