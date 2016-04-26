@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -290,5 +291,20 @@ public class MockitoTest {
 		   //optionally, you can verify
 		   verify(spy).add("one");
 		   verify(spy).add("two");
+	}
+	
+	/*
+	 * Hier wird gezeigt das man return values auch gleich beim initialisieren eines mock objekts definieren kann
+	 * indem man es einfach als Paramter dazu hängt als z.B. answer
+	 */
+	@Test
+	public void testAssigningReturnValuesWihoutStubbing(){
+		 List mock = mock(List.class, Mockito.RETURNS_SMART_NULLS);
+	     List mockTwo = mock(List.class, new Answer(){
+		     public Object answer(InvocationOnMock invocation) {
+		         Object[] args = invocation.getArguments();
+		         return "called with arguments: " + args;
+		     }
+		 });
 	}
 }
