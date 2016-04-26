@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -306,5 +307,13 @@ public class MockitoTest {
 		         return "called with arguments: " + args;
 		     }
 		 });
+	}
+	
+	@Test
+	public void testCapturingArguments(){
+		mockedList.add("test");
+		ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
+		verify(mockedList).add(argument.capture());
+		assertEquals("test", argument.getValue().get(0));
 	}
 }
