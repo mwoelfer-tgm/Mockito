@@ -102,5 +102,14 @@ public class MockitoTest {
 		 verify(mockedList, atLeast(2)).add("twice");
 		 verify(mockedList, atMost(5)).add("three times");
 	}
+	
+	//mit der methode doThrow() kann man sagen welche Exception geworfen werden soll wenn (=> .when()) etwas bestimmtes gemacht wird
+	@Test
+	public void testMethodWithExceptions(){
+		doThrow(new RuntimeException()).when(mockedList).clear();
+
+	   //following throws RuntimeException:
+	   mockedList.clear();
+	}
 
 }
