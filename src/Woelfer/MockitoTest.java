@@ -201,8 +201,38 @@ public class MockitoTest {
 		 verifyNoMoreInteractions(mockedList);
 	}
 	
+	/*
+	 * Zuerst wurde eine Klasser erstellt wo verschiedene beliebige Attribute erstellt wurden mit der
+	 * Annotation @Mock
+	 * Dann wurde aus der Klasse MockitoAnnotations die Methode initMocks() ausgeführt welche als Parameter ein Objekt
+	 * von der Klasse nimmt wo die Attribute initinialisiert werden soll, dadurch kann man statt
+	 * Integer mock = mock(Integer.class); einfach @Mock Integer mock; schreiben
+	 * 
+	 */
 	@Test
 	public void testShorthandMockCreation(){
 		MockitoAnnotations.initMocks(new annotationTest());
+	}
+	
+	/*
+	 * Es wurde am anfang wieder gestubbed, wenn nun die Methode get(0) aufgerufen wird, wird zuerst
+	 * eine RunTimeException geworfen und dann"SEW FTW" geprintet
+	 * 
+	 * Falls man danach nochmal get(0) aufruft, wird wieder geprintet => "Last stubbing wins"
+	 */
+	@Test
+	public void testConsecutiveStubbing(){
+		 when(mockedList.get(0))
+		   .thenThrow(new RuntimeException())
+		   .thenReturn("SEW FTW");
+
+		 //First call: throws runtime exception:
+		 mockedList.get(0);
+
+		 //Second call: prints "foo"
+		 System.out.println(mockedList.get(0));
+
+		 //Any consecutive call: prints "foo" as well (last stubbing wins).
+		 System.out.println(mockedList.get(0));
 	}
 }
